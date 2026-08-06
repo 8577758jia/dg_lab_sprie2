@@ -137,6 +137,21 @@ dglab_socket_spire2-x.y.z.zip
 
 `.wave` 文件内容仍然是 JSON，扩展名改为 `.wave` 是为了避免 STS2 的 mod loader 把非 manifest 的 `.json` 文件误当作 mod manifest 扫描。
 
+`waves/` 目录同时支持郊狼官方 3.0 导出的 `.pulse` 波形文件（`Dungeonlab+pulse:` 文本格式），直接放入即可，无需转换。加载规则：
+
+- 波形名取文件名（不含扩展名），例如 `127-自定义0.pulse` 会注册为 `127-自定义0`。
+- 支持多小节（`+section+` 分隔）、频率模式 1-4（固定 / 节内渐变 / 元内渐变 / 元间渐变）、休息时长和速度倍率。
+- 加载时会按官方格式文档把频率滑块、小节时长滑块展开成 100ms 一帧的协议数据，与官方导出行为一致（频率滑块 0-83、小节时长滑块 0-99、休息滑块）。
+- 如果 `.pulse` 与内置/其他自定义波形重名，后加载的覆盖先加载的。
+
+`.wave` 支持以下三种 JSON 结构：
+
+1. 官方导出数组：`[{"name":"...","expectedV3":["0A0A0A0A00000000",...]}, ...]`（也兼容 `frames` 字段）；
+2. 单对象：`{"name":"...","frames":[...]}`；
+3. 纯字符串数组：整个数组即帧列表，波形名取文件名。
+
+重载配置（控制台的重载按钮）会重新扫描 `waves/` 目录并立即生效。
+
 ## 构建与安装
 
 前置要求：
@@ -144,6 +159,11 @@ dglab_socket_spire2-x.y.z.zip
 - 已安装 `.NET SDK 9.0` 或更高版本
   - 下载地址：`https://aka.ms/dotnet-download`
 - 仓库内存在 `refs/sts2/` 引用 DLL，或通过 `STS2_REF_DIR` / `-ReferenceDir` 指向有效引用目录
+
+兼容性说明：
+
+- 当前 `refs/sts2/` 已同步自游戏 **v0.107.1**（commit `59260271`，2026-06-18 构建）。
+- 该版本起 `Hook` 的战斗钩子参数由 `CombatState` 改为 `ICombatState`，旧游戏版本（如 2026-04 之前）与当前代码不兼容；请保持游戏为较新版本，或在升级游戏后重新执行 `sync-sts2-refs.ps1`。
 
 ```powershell
 .\scripts\install-mod.ps1
@@ -247,3 +267,10 @@ macOS / Linux / SteamOS 也可以使用 shell 安装脚本：
 ## 说明
 
 配对页里的二维码图片目前使用在线二维码图片服务生成；如果图片加载失败，仍可直接复制配对链接给 DG-LAB APP 使用。
+
+## 更新日志
+
+- `0.1.4`
+  - 新增官方郊狼 3.0 `.pulse` 波形文件直接导入（`waves/*.pulse`，文件名即波形名），按官方格式文档还原频率滑块、小节时长、休息段与速度倍率，逐帧对齐官方导出结果。
+  - 修复自定义 `.wave` JSON 无法识别的问题：现在支持官方对象数组（`name` + `expectedV3`/`frames`）、单对象和纯字符串数组三种结构。
+  - 同步 `refs/sts2/sts2.dll` 至游戏 v0.107.1，适配 `Hook` 接口变更（`CombatState` → `ICombatState`）。

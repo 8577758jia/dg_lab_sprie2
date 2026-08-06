@@ -18,7 +18,7 @@ namespace DgLabSocketSpire2.Patching;
 [HarmonyPatch(typeof(Hook), nameof(Hook.BeforeCombatStart))]
 internal static class BeforeCombatStartPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -33,7 +33,7 @@ internal static class BeforeCombatStartPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCombatVictory))]
 internal static class AfterCombatVictoryPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, CombatRoom room)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, CombatRoom room)
     {
         __result = PatchHelpers.Chain(__result, () => BridgeService.Instance.OnCombatVictory());
     }
@@ -42,7 +42,7 @@ internal static class AfterCombatVictoryPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCombatEnd))]
 internal static class AfterCombatEndPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, CombatRoom room)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, CombatRoom room)
     {
         __result = PatchHelpers.Chain(__result, () => BridgeService.Instance.OnCombatEnded());
     }
@@ -51,7 +51,7 @@ internal static class AfterCombatEndPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterDamageReceived))]
 internal static class AfterDamageReceivedPatch
 {
-    private static void Postfix(ref Task __result, PlayerChoiceContext choiceContext, IRunState runState, CombatState? combatState, Creature target, DamageResult result, MegaCrit.Sts2.Core.ValueProps.ValueProp props, Creature? dealer, CardModel? cardSource)
+    private static void Postfix(ref Task __result, PlayerChoiceContext choiceContext, IRunState runState, ICombatState? combatState, Creature target, DamageResult result, MegaCrit.Sts2.Core.ValueProps.ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -67,7 +67,7 @@ internal static class AfterDamageReceivedPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCurrentHpChanged))]
 internal static class AfterCurrentHpChangedPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, Creature creature, decimal delta)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, Creature creature, decimal delta)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -87,7 +87,7 @@ internal static class AfterCurrentHpChangedPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterDeath))]
 internal static class AfterDeathPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, Creature creature, bool wasRemovalPrevented, float deathAnimLength)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, Creature creature, bool wasRemovalPrevented, float deathAnimLength)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -102,7 +102,7 @@ internal static class AfterDeathPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCardPlayed))]
 internal static class AfterCardPlayedPatch
 {
-    private static void Postfix(ref Task __result, CombatState combatState, PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    private static void Postfix(ref Task __result, ICombatState combatState, PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -142,7 +142,7 @@ internal static class AfterGoldGainedPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterPotionUsed))]
 internal static class AfterPotionUsedPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, PotionModel potion, Creature? target)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, PotionModel potion, Creature? target)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -157,7 +157,7 @@ internal static class AfterPotionUsedPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterPotionProcured))]
 internal static class AfterPotionProcuredPatch
 {
-    private static void Postfix(ref Task __result, IRunState runState, CombatState? combatState, PotionModel potion)
+    private static void Postfix(ref Task __result, IRunState runState, ICombatState? combatState, PotionModel potion)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -214,7 +214,7 @@ internal static class AfterItemPurchasedPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterBlockBroken))]
 internal static class AfterBlockBrokenPatch
 {
-    private static void Postfix(ref Task __result, CombatState combatState, Creature creature)
+    private static void Postfix(ref Task __result, ICombatState combatState, Creature creature)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
@@ -229,7 +229,7 @@ internal static class AfterBlockBrokenPatch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterPlayerTurnStart))]
 internal static class AfterPlayerTurnStartPatch
 {
-    private static void Postfix(ref Task __result, CombatState combatState, PlayerChoiceContext choiceContext, Player player)
+    private static void Postfix(ref Task __result, ICombatState combatState, PlayerChoiceContext choiceContext, Player player)
     {
         __result = PatchHelpers.Chain(__result, () =>
         {
