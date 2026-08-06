@@ -2,6 +2,9 @@
 
 这个 mod 会在游戏里启动一个 DG-LAB `socket/v2` 兼容桥接服务，并把杀戮尖塔2的战斗/奖励事件映射成 DG-LAB 强度或波形指令。
 
+## 已上传至创意工坊
+https://steamcommunity.com/sharedfiles/filedetails/?id=3778519749
+
 ## 输出结构
 
 构建输出：
